@@ -1,0 +1,14 @@
+FROM python:3.8
+
+RUN apt update && apt install -y gcc python3-dev musl-dev
+
+COPY ./scout_service/requirements.txt ./scout_service/requirements.txt
+RUN pip3 install -r ./scout_service/requirements.txt
+
+COPY ./scout_service ./scout_service
+COPY ./search_service ./search_service
+COPY ./common ./common
+COPY ./scout_service/infrastructure/config.deploy.yaml ./scout_service/config.yaml
+
+WORKDIR ./scout_service
+CMD ["python", "scout_service.py"]

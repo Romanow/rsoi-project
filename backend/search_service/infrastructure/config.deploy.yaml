@@ -1,0 +1,33 @@
+app:
+  app_name: SearchService
+  debug: false
+  host: 0.0.0.0  # default value
+  port: 5002
+  logging:
+      logger_name: SearchServiceLogger
+      app_name: SearchService
+      level: info
+      file: search_service.log
+      file_level: info
+
+database:
+  connector: postgres
+  dbname: qrook_library
+  username: kurush
+  password: pondoxo
+  host: qrook-postgres-service
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: SearchService
+    level: warning
+    file: search_service.log
+    file_level: warning
+
+jwt:
+  jwks_uri: http://qrook-auth-service:5001/oauth/.well-known/jwks
+  iss: http://kurush7.cloud.okteto.net
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+
+kafka_producer:
+  bootstrap.servers: qrook-kafka-service:9092

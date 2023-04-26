@@ -1,0 +1,9 @@
+version: 7.0.9
+
+resources:
+  requests:
+    cpu: 800m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi

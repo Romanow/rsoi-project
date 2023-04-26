@@ -1,0 +1,28 @@
+apiVersion: v2
+name: services-chart
+type: application
+version: 1.0.0
+dependencies:
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-auth
+
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-search
+
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-scout
+
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-file
+
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-api
+
+  - name: service-chart
+    version: 1.0.0
+    alias: qrook-frontend

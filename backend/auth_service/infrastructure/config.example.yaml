@@ -1,0 +1,29 @@
+app:
+  app_name: GatewayService
+  debug: false
+  host: localhost
+  port: 5001
+
+
+database:
+  connector: postgresql
+  dbname: qrook_oidc
+  username: kurush
+  password: pondoxo
+  host: localhost
+  port: 5432
+
+jwt:
+  kid: unexpectedly_an_id
+  private_key: ./auth/etc/jwtRS256.key
+  public_key: ./auth/etc/jwtRS256.key.pub
+  alg: RS256
+  iss: https://authlib.org  # todo
+  exp: 86400                # seconds
+
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+
+dummy_client:
+  id: '12345'
+  secret: '12345'
+  iss: https://authlib.org  # issuer from admin!

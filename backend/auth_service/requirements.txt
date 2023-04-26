@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Authlib==0.13
+qrconfig
+qr-server
+python-jose
+pydantic
+confluent_kafka
+requests

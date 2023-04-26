@@ -1,0 +1,747 @@
+openapi: 3.0.0
+info:
+  title: Qrook backend
+  version: '2.1'
+paths:
+  /users:
+    post:
+      summary: Register new user
+      description: Register new user
+      operationId: ApiService_AuthRegister
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiAuthRegisterResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/apiAuthRegisterRequest'
+        required: true
+      tags:
+        - users
+      security: []
+    get:
+      summary: Get user data
+      description: Get user data
+      operationId: ApiService_AuthUserData
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiAuthUserDataResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - users
+      security:
+        - ApiKeyAuth: []
+
+
+    put:
+      summary: Edit user info
+      description: Edit user info
+      operationId: ApiService_AuthEditProfile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  description: image file.
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                login:
+                  type: string
+                password:
+                  type: string
+                new_password:
+                  type: string
+              required:
+                - login
+                - password
+      responses:
+        '200':
+          description: A successful response
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - users
+      security:
+        - ApiKeyAuth: []
+
+    delete:
+      summary: Delete user account
+      description: Delete user account
+      operationId: ApiService_AuthDeleteProfile
+      responses:
+        '200':
+          description: A successful response
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - users
+      security:
+        - ApiKeyAuth: []
+
+  /users/login:
+    post:
+      summary: Login user
+      description: Login user
+      operationId: ApiService_AuthLogin
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiAuthLoginResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/apiAuthLoginRequest'
+        required: true
+      tags:
+        - users
+      security: []
+
+  /books/images/{filename}:
+    get:
+      summary: Get book skin image file
+      description: Get book skin image file
+      operationId: ApiService_FileBookImage
+      responses:
+        '200':
+          description: The image file
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema:
+            type: string
+      tags:
+        - library
+      security: []
+  /authors/photos/{filename}:
+    get:
+      summary: Get author photo file
+      description: Get author photo file
+      operationId: ApiService_FileAuthorPhoto
+      responses:
+        '200':
+          description: The image file
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema:
+            type: string
+      tags:
+        - library
+      security: []
+
+  /users/avatars/{filename}:
+    get:
+      summary: Get avatar image file
+      description: Get avatar image file
+      operationId: ApiService_FileGetAvatar
+      responses:
+        '200':
+          description: The image file
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema:
+            type: string
+      tags:
+        - users
+      security: []
+
+  /users/avatars/:
+    patch:
+      summary: Load user avatar
+      description: Load user avatar
+      operationId: ApiService_FilesSaveAvatar
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  description: image file
+                  type: string
+                  format: binary
+              required:
+                - avatar
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiFileSaveAvatarResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - users
+      security:
+        - ApiKeyAuth: []
+
+
+  /series/images/{filename}:
+    get:
+      summary: Get series image file
+      description: Get series skin image file
+      operationId: ApiService_FileSeriesImage
+      responses:
+        '200':
+          description: The image file
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema:
+            type: string
+      tags:
+        - library
+      security: []
+  /books/files/{file_path}:
+    get:
+      summary: Get book file
+      description: 'Get book file. {file_path} may be complex, like "/aa/bb/file.fb2"'
+      operationId: ApiService_FileBook
+      responses:
+        '200':
+          description: The book file
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: file_path
+          required: true
+          schema:
+            type: string
+      tags:
+        - library
+      security:
+        - ApiKeyAuth: []
+
+  /books/{id}:
+    get:
+      summary: Get full book info by its id
+      description: Get full book info by its id
+      operationId: ApiService_SearchBook
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiBookFull'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - library
+      security: []
+  /authors/{id}:
+    get:
+      summary: Get full author info by its id
+      description: Get full author info by its id
+      operationId: ApiService_SearchAuthor
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiAuthorFull'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - library
+      security: []
+  /series/{id}:
+    get:
+      summary: Get full series info by its id
+      description: Get full series info by its id
+      operationId: ApiService_SearchSeries
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiSeriesFull'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - library
+      security: []
+
+  /events:
+    post:
+      summary: Register event
+      description: Register event
+      operationId: ApiService_ScoutRegisterEvent
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                time:
+                  description: timestamp
+                  type: integer
+                event:
+                  description: short event description
+                  type: string
+                data:
+                  description: info connected with event
+                  type: object
+              required:
+                - time
+                - event
+      responses:
+        '200':
+          description: A successful response
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - events
+      security:
+        - ApiKeyAuth: []
+
+  /library:
+    get:
+      summary: Get filtered all-the-info
+      description: >-
+        Get previews info about books, series and authors depending on incoming
+        filters
+      operationId: ApiService_SearchMain
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiSearchMainResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      parameters:
+        - in: query
+          name: search
+          description: template string to search
+          schema:
+            type: string
+        - in: query
+          name: find_book
+          description: flag to include books info
+          schema:
+            type: boolean
+        - in: query
+          name: find_author
+          description: flag to include authors info
+          schema:
+            type: boolean
+        - in: query
+          name: find_series
+          description: flag to include series info
+          schema:
+            type: boolean
+        - in: query
+          name: book_id
+          description: define concrete book to return; requires find_book flag on!
+          schema:
+            type: integer
+        - in: query
+          name: author_id
+          description: define concrete author to return; requires find_author flag on!
+          schema:
+            type: integer
+        - in: query
+          name: series_id
+          description: define concrete series to return; requires find_series flag on!
+          schema:
+            type: integer
+        - in: query
+          name: language
+          description: >-
+            defines language to be used in book (applicable also for authors and
+            series)
+          schema:
+            type: string
+        - in: query
+          name: format
+          description: >-
+            defines format for book files  (applicable also for authors and
+            series)
+          schema:
+            type: string
+        - in: query
+          name: genres
+          description: >-
+            defines genres which book must belong to (applicable also for
+            authors and series). genres must be ';'-separated. example ->
+            'fantasy; scince fiction; history'
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: >-
+            defines which way to sort data. possible values are ->  name_acc,
+            name_desc, date_acc, date_desc, series_order (by book_order for
+            books in one series)
+          schema:
+            type: string
+      tags:
+        - library
+      security: []
+
+
+
+  /users/recent_viewed:
+    get:
+      summary: Get filtered all-the-info
+      description: >-
+        Get previews info about books, series and authors depending on incoming
+        filters
+      operationId: ApiService_RecentViewed
+      responses:
+        '200':
+          description: A successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/apiSearchMainResponse'
+        '404':
+          description: Returned when the resource does not exist
+        '500':
+          description: Server error
+      tags:
+        - users
+      security: []
+security:
+  - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: bearer token
+  schemas:
+    apiAuthRegisterRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+    apiAuthRegisterResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+    apiAuthLoginRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    apiAuthLoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+    apiAuthUserDataResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+        avatar:
+          type: string
+    apiFileSaveAvatarResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+    apiAuthorLink:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    apiSeriesLink:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+
+    apiBookFile:
+      type: object
+      properties:
+        publication_id:
+          type: integer
+        file_path:
+          type: string
+        file_type:
+          type: string
+    apiBookPublication:
+      type: object
+      properties:
+        id:
+          type: integer
+        book_id:
+          type: integer
+        language_code:
+          type: string
+        isbn:
+          type: string
+        isbn13:
+          type: string
+        publication_year:
+          type: integer
+        info:
+          type: object
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiBookFile'
+    apiBookFull:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        title:
+          type: string
+        skin_image:
+          type: string
+        type:
+          type: string
+          default: book
+        genres:
+          type: array
+          items:
+            type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiAuthorLink'
+        series:
+          $ref: '#/components/schemas/apiSeriesLink'
+        publications:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiBookPublication'
+    apiBookPreview:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        skin_image:
+          type: string
+        type:
+          type: string
+          default: book
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiAuthorLink'
+        series:
+            $ref: '#/components/schemas/apiSeriesLink'
+
+    apiAuthorFull:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        name:
+          type: string
+        photo:
+          type: string
+        birthdate:
+          type: string
+        country:
+          type: string
+        type:
+          type: string
+          default: author
+
+    apiAuthorPreview:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        photo:
+          type: string
+        type:
+          type: string
+          default: author
+
+    apiSeriesFull:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        title:
+          type: string
+        skin_image:
+          type: string
+        type:
+          type: string
+          default: series
+        is_finished:
+          type: string
+        books_count:
+          type: integer
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiAuthorLink'
+
+    apiSeriesPreview:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        skin_image:
+          type: string
+        type:
+          type: string
+          default: series
+        books_count:
+          type: integer
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiAuthorLink'
+    apiSearchMainResponse:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/apiBookPreview'
+          - $ref: '#/components/schemas/apiSeriesPreview'
+          - $ref: '#/components/schemas/apiAuthorPreview'

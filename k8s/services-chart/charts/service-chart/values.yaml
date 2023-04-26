@@ -1,0 +1,22 @@
+domain: kurush7.cloud.okteto.net
+service:
+  port:
+  isGateway:
+  image:
+    name:
+    version:
+
+  database:
+    name:
+    host: qrook-postgres-service
+    port: 5432
+    username: postgres
+    password: postgres
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1Gi
+    limits:
+      cpu: 200m
+      memory: 1Gi

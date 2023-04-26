@@ -1,0 +1,34 @@
+app:
+  app_name: AuthService
+  debug: false
+  host: localhost
+  port: 5000
+  logging:
+      logger_name: AuthServiceLogger
+      app_name: AuthService
+      level: info
+      file: auth_service.log
+      file_level: info
+  recent_viewed_limit: 20
+
+services:
+  file_service: http://localhost:5001/
+
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: kurush
+  password: pondoxo
+  host: qrook_postgres
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: AuthServiceTest
+    level: info
+    file: test_auth_service.log
+    file_level: info
+
+jwt:
+  secret: 'wheel of time'
+  algorithm: HS256
+  exp_seconds: 86400

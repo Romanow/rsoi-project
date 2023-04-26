@@ -1,0 +1,22 @@
+app:
+  app_name: FileService
+  debug: false
+  host: 0.0.0.0
+  port: 5003
+  logging:
+      logger_name: FileServiceLogger
+      app_name: FileService
+      level: info
+      file: file_service.log
+      file_level: info
+
+file_storage:
+  books: books/
+
+jwt:
+  jwks_uri: http://qrook-auth-service:5001/oauth/.well-known/jwks
+  iss: http://kurush7.cloud.okteto.net
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+
+kafka_producer:
+  bootstrap.servers: qrook-kafka-service:9092

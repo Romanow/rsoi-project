@@ -1,0 +1,13 @@
+FROM python:3.8
+
+RUN apt update && apt install -y gcc python3-dev musl-dev
+
+COPY ./search_service/requirements.txt ./search_service/requirements.txt
+RUN pip3 install -r ./search_service/requirements.txt
+
+COPY ./search_service ./search_service
+COPY ./common ./common
+COPY ./search_service/infrastructure/config.deploy.yaml ./search_service/config.yaml
+
+WORKDIR ./search_service
+CMD ["python", "search_service.py"]

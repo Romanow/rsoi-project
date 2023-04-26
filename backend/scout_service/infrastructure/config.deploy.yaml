@@ -1,0 +1,39 @@
+app:
+  app_name: ScoutService
+  debug: false
+  host: 0.0.0.0
+  port: 5004
+  logging:
+      logger_name: ScoutServiceLogger
+      app_name: ScoutService
+      level: info
+      file: scout_service.log
+      file_level: info
+  recent_viewed_limit: 20
+
+database:
+  connector: postgres
+  dbname: qrook_scout
+  username: kurush
+  password: pondoxo
+  host: qrook-postgres-service
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: ScoutService
+    level: info
+    file: scout_service.log
+    file_level: info
+
+jwt:
+  jwks_uri: http://qrook-auth-service:5001/oauth/.well-known/jwks
+  iss: http://kurush7.cloud.okteto.net
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+
+kafka_consumer:
+  config:
+    bootstrap.servers: qrook-kafka-service:9092
+    group.id: qrook_scout
+    auto.offset.reset: earliest        # latest
+    enable.auto.commit: true
+  topics: using_filters searching view_author view_series view_book download_book

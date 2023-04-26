@@ -1,0 +1,40 @@
+app:
+  app_name: GatewayService
+  debug: false
+  host: localhost
+  port: 5000
+  logging:
+    logger_name: GatewayServiceLogger
+    app_name: GatewayService
+    level: debug
+    file: gateway_service.log
+    file_level: info
+
+
+services:
+  auth_service:
+    host: localhost
+    port: 5001
+    redirect_auth: http://localhost:5001/oauth/authorize
+
+  search_service:
+    host: localhost
+    port: 5002
+
+  file_service:
+    host: localhost
+    port: 5003
+
+  scout_service:
+    host: localhost
+    port: 5004
+
+circuit_breaker:
+  failure_threshold: 3
+  knock_timeout: 5   # опрашивать упавшие сервисы раз в N секунд
+
+jwt:
+  jwks_uri: http://localhost:5001/oauth/.well-known/jwks
+  iss: https://authlib.org  # todo
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+  dummy_token: eyJhbGciOiJSUzI1NiIsImtpZCI6InVuZXhwZWN0ZWRseV9hbl9pZCIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1dGhsaWIub3JnIiwiYXVkIjpbIktRNVRyR3ROTHBMRFlJUE9hS0VndzBCdCJdLCJpYXQiOjE2ODE3NDQ3OTIsImV4cCI6MTY4MTgzMTE5MiwiYXV0aF90aW1lIjoxNjgxNzQ0NzkyLCJhdF9oYXNoIjoidm90VEVLemh4TFZuS1k2TWJkNlgydyIsImVtYWlsIjoiYWFhIiwibmlja25hbWUiOiJkdW1teSIsIm5hbWUiOiJkZGQiLCJmYW1pbHlfbmFtZSI6ImVlZSIsImF2YXRhciI6bnVsbCwic3ViIjoidXNlciJ9.G-qWBCdrLfWqH55T1XGSGPaxL3zPuh4nWsNfalmPKm1i6FoYSsyQm3CRyxT4lPBhtrEU_r2K3WgX7axxuR4S6E63sszHyjtaYU0xkX7odrcrvftdCSohQoJJEkZkpgBL3Qq3l21LE1Bc72iaNXAcBJ1RROEVdktpu3sp4UGjn1CzoC2Cm2BigeKKiLUhmDkO0f5ckWT1XKyP9Rqmw9-VtDPH6pO07_KKc22zvsY03ioT0p0kmmsnN5CFwSRMCBPmlfnHtGyujcn65Sjksn9RwrgrXrY7Q7YEErB8PbZHEStzHDArpXC4s_SbCupCv4wI3CH5ugLP7tyKPJ6DZPdziP1LKdRKbqvTjjbOVIcz3ZrxlgaKDXIvG8jfx5b5lbM9WtA8cpqBCmbcrm3pjnaFxfsi0qD20cRW6LJsUTg-CgqsAdR6zIrYkBdBeYcn1t6cW6obR_gjwvRvzNBMrkyOOg8vRzDNQ61r2I8lN49rGstayJlVpNzick1ryarO51GFJzaE2l0H2IXvIaItCDC4AvRt2lAYgZ2aQN5YqOI1Raj6hpJCb48xiQp_OnuMZq70J_yhMj4wqv3eU9hsveVjfNhvvIdC7CwLomE6CEkfnNXPIzWKdlpJaI5UfiHEEwBVxJyzOQY0yakZNsiGl0BCPRQHanFSos6Ww71tZOKYVbs

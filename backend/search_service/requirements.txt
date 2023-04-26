@@ -1,0 +1,10 @@
+qrookDB==1.3.2.3
+qr-server==1.1.10
+confuse
+PyJWT
+psycopg2-binary==2.8.6
+Inject
+gevent
+python-jose
+pydantic
+confluent_kafka

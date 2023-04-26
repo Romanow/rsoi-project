@@ -1,0 +1,54 @@
+qrook-auth:
+  service:
+    port: 5001
+    image:
+      name: kurushpondoxocrow/qrook_auth
+      version: "3.0"
+    database:
+      name: qrook_auth
+      username: kurush
+      password: pondoxo
+    environments:
+      AUTHLIB_INSECURE_TRANSPORT: 1
+
+qrook-search:
+  service:
+    port: 5002
+    image:
+      name: kurushpondoxocrow/qrook_search
+      version: "3.0"
+    database: 
+      name: qrook_library
+      username: kurush
+      password: pondoxo
+
+qrook-file:
+  service:
+    port: 5003
+    image:
+      name: kurushpondoxocrow/qrook_file
+      version: "3.0"
+
+qrook-scout:
+  service:
+    port: 5004
+    image:
+      name: kurushpondoxocrow/qrook_scout
+      version: "3.0"
+
+
+qrook-api:
+  service:
+    port: 5000
+    image:
+      name: kurushpondoxocrow/qrook_api
+      version: "3.0"
+    isGateway: true
+
+
+qrook-frontend:
+  service:
+    port: 8080
+    image:
+      name: kurushpondoxocrow/qrook_frontend
+      version: "3.0"

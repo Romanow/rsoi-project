@@ -1,0 +1,8 @@
+CREATE DATABASE qrook_auth;
+GRANT ALL PRIVILEGES ON DATABASE qrook_auth TO kurush;
+
+CREATE DATABASE qrook_library;
+GRANT ALL PRIVILEGES ON DATABASE qrook_library TO kurush;
+
+CREATE DATABASE qrook_scout;
+GRANT ALL PRIVILEGES ON DATABASE qrook_scout TO kurush;

@@ -1,0 +1,36 @@
+const state = {
+ logged_in: false,
+ user_info: null
+}
+
+const actions = {
+    login({ commit }) {
+        commit('login');
+    },
+    logout({ commit }) {
+        commit('logout');
+    },
+    user_info({ commit }, data) {
+        commit('user_info', data);
+    },
+};
+
+const mutations = {
+    login(state) {
+        state.logged_in = true;
+    },
+    logout(state) {
+        state.logged_in = false;
+        state.user_info = null
+    },
+    user_info(state, data) {
+        state.user_info = data;
+    },
+};
+
+export const account = {
+    namespaced: true,
+    state,
+    actions,
+    mutations
+};

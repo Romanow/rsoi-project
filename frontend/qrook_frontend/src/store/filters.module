@@ -1,0 +1,36 @@
+const state = {
+ search: null,
+ filters: null
+}
+
+const actions = {
+    set_search({ commit }, search) {
+        commit('set_search', search);
+    },
+    set_filters({ commit }, filters) {
+        commit('set_filters', filters, false);
+    },
+    extend_filters({ commit }, filters) {
+        commit('extend_filters', filters, true);
+    },
+};
+
+const mutations = {
+    set_search(state, search) {
+        state.search = search;
+        state.filters['search'] = search;
+    },
+    set_filters(state, filters) {
+        state.filters = filters
+    },
+    extend_filters(state, filters) {
+        state.filters = Object.assign({}, state.filters, filters);
+    },
+};
+
+export const filters = {
+    namespaced: true,
+    state,
+    actions,
+    mutations
+};

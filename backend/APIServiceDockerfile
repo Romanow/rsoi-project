@@ -1,0 +1,16 @@
+FROM python:3.8
+
+RUN apt update && apt install -y gcc python3-dev musl-dev
+
+COPY ./api_gateway/requirements.txt ./api_gateway/requirements.txt
+RUN pip3 install -r ./api_gateway/requirements.txt
+
+COPY ./api_gateway ./api_gateway
+COPY ./auth_service ./auth_service
+COPY ./search_service ./search_service
+COPY ./scout_service ./scout_service
+COPY ./common ./common
+COPY ./api_gateway/infrastructure/config.deploy.yaml ./api_gateway/config.yaml
+
+WORKDIR ./api_gateway
+CMD ["python", "api_gateway.py"]

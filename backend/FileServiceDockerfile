@@ -1,0 +1,13 @@
+FROM python:3.8
+
+RUN apt update && apt install -y gcc python3-dev musl-dev
+
+COPY ./file_service/requirements.txt ./file_service/requirements.txt
+RUN pip3 install -r ./file_service/requirements.txt
+
+COPY ./file_service ./file_service
+COPY ./common ./common
+COPY ./file_service/infrastructure/config.deploy.yaml ./file_service/config.yaml
+
+WORKDIR ./file_service
+CMD ["python", "file_service.py"]

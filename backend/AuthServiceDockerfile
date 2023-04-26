@@ -1,0 +1,13 @@
+FROM python:3.8
+
+RUN apt update && apt install -y gcc python3-dev musl-dev
+
+COPY ./auth_service/requirements.txt ./auth_service/requirements.txt
+RUN pip3 install -r ./auth_service/requirements.txt
+
+COPY ./auth_service ./auth_service
+COPY ./common ./common
+COPY ./auth_service/infrastructure/config.deploy.yaml ./auth_service/config.yaml
+
+WORKDIR ./auth_service
+CMD ["python", "auth_service.py"]

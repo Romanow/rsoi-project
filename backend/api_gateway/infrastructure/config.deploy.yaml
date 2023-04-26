@@ -1,0 +1,40 @@
+app:
+  app_name: GatewayService
+  debug: false
+  host: 0.0.0.0
+  port: 5000
+  logging:
+    logger_name: GatewayServiceLogger
+    app_name: GatewayService
+    level: debug
+    file: gateway_service.log
+    file_level: info
+
+
+services:
+  auth_service:
+    host: qrook-auth-service
+    port: 5001
+    redirect_auth: http://auth.kurush7.cloud.okteto.net/oauth/authorize
+
+  search_service:
+    host: qrook-search-service
+    port: 5002
+
+  file_service:
+    host: qrook-file-service
+    port: 5003
+
+  scout_service:
+    host: qrook-scout-service
+    port: 5004
+
+circuit_breaker:
+  failure_threshold: 3
+  knock_timeout: 5   # опрашивать упавшие сервисы раз в N секунд
+
+jwt:
+  jwks_uri: http://qrook-auth-service:5001/oauth/.well-known/jwks
+  iss: http://kurush7.cloud.okteto.net
+  aud: pRiDvVWqbMdVcqUcubD0Y54V # audience (client_id)
+  dummy_token: eyJhbGciOiJSUzI1NiIsImtpZCI6InVuZXhwZWN0ZWRseV9hbl9pZCIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8va3VydXNoNy5jbG91ZC5va3RldG8ubmV0IiwiYXVkIjpbInBSaUR2VldxYk1kVmNxVWN1YkQwWTU0ViJdLCJpYXQiOjE2ODIzMjYxNDksImV4cCI6MTY4MjQxMjU0OSwiYXV0aF90aW1lIjoxNjgyMzI2MTQ5LCJhdF9oYXNoIjoiVDcwMVVaYTM3RjNiVkdUVlo0MG9SZyIsImVtYWlsIjoiZHVtbXlAeWEucnUiLCJuaWNrbmFtZSI6ImR1bW15IiwibmFtZSI6ImR1bW15IiwiZmFtaWx5X25hbWUiOiJkdW1teSIsImF2YXRhciI6bnVsbCwic3ViIjoidXNlciJ9.PNQHQaxstXnXokQ8IWf7-kYuGGMfiAgiQ2rQKadu2BKnCsb_yfyPXqJa_FwFv2067sx_4pGqrQAp1RRiV_F9-4Un_ybvo1UZ1swWmYoeYRCo_75OCZ8p_7JBGiYoZCKlQxy1pcIF-oVEPzp9ROiqvNjhJKkPMESil0BjmtC0EddobKIAAdPgEYl-y7xnU1hjtzg4uMRbLxUIGBuCXtMUZU4FNI5Ge2yNZjlJ2VWu8XzE5GW7wDtOAGCz48H47GVf1TIFdMLbcN8ImzYM_sMKN6olKTJAocNj1bdo9iBMejv1YVz_N84JuKR9QGi7fH6zemGUlGpEuH5gcegB8fc6LsNzIZ1zrP2SVecFYPSuLexOs-dLMEHxrg4plusAxGjWtz5ri0n9VdrG003sGG49H6YTHOkStg14apgHEme1X9zZSqdCxPY5B8Y25YSF-IS2iBnl3uPcDC44iGOJlaB3Wrqf_Fn1sOliHJxgxboajwT_6H3Kt4Wz-z8zpf6x_Vcw81k4TPIJxn9R8Vae1LooCP717IP0v3h4-dPx4exrYXGWktXiVWRj8xISosBmPkoS74okdW-2XYsSrugjmqdZsRo5moag9lCZG9_lolJPDbgJ3oShLH9Vq0u1U_2bwS0fwSaL84grT1hNFlc7fKZ8CtGcJT6nQBYi7jR-wzJRjxA

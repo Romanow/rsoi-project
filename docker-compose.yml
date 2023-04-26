@@ -1,46 +1,78 @@
 version: "3"
 services:
-  postgres:
-    image: library/postgres:15
-    container_name: postgres
-    restart: on-failure
+  qrook_postgres:
+    image: kurushpondoxocrow/qrook_postgres:3.0
+    restart: unless-stopped
+    container_name: qrook_postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: pondoxo
+      POSTGRES_USER: kurush
+      POSTGRES_DB: qrook
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./.docker/data/postgresql/:/var/lib/postgresql/data/
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - "5432:5432"
+      - 5432:5432
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.2
-    container_name: zookeeper
+  qrook_zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: qrook_zookeeper
+    restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - "22181:2181"
+      - 2181:2181
 
-  kafka:
-    image: confluentinc/cp-kafka:7.3.2
-    container_name: kafka-1
+  qrook_kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: qrook_kafka
+    restart: unless-stopped
     ports:
-      - "9092:9092"
+      - 29092:29092
+      - 9092:9092
+    depends_on:
+      - qrook_zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: qrook_zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://qrook_kafka:9092, PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://qrook_kafka:9092, PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
 
-# TODO добавить сервисы
+  qrook_api:
+    image: kurushpondoxocrow/qrook_api:3.0
+    restart: unless-stopped
+    container_name: qrook_api
+    ports:
+      - 5000:5000
 
-volumes:
-  db-data:
+  qrook_auth:
+    image: kurushpondoxocrow/qrook_auth:3.0
+    restart: unless-stopped
+    container_name: qrook_auth
+    ports:
+      - 5001:5001
+
+  qrook_search:
+    image: kurushpondoxocrow/qrook_search:3.0
+    restart: unless-stopped
+    container_name: qrook_search
+    ports:
+      - 5002:5002
+
+  qrook_file:
+    image: kurushpondoxocrow/qrook_file:3.0
+    restart: unless-stopped
+    container_name: qrook_file
+    ports:
+      - 5003:5003
+
+  qrook_scout:
+    image: kurushpondoxocrow/qrook_scout:3.0
+    restart: unless-stopped
+    container_name: qrook_scout
+    ports:
+      - 5004:5004

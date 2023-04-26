@@ -1,0 +1,10 @@
+version: 7.0.9
+port: 2181
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 200m
+    memory: 1Gi
