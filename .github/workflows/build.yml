@@ -1,11 +1,12 @@
 name: Build Project
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+    branches: [ master ]
+
+env:
+  KUBER_HOST: ${{ secrets.KUBER_HOST }}
+  KUBER_TOKEN: ${{ secrets.KUBER_TOKEN }}
+
 jobs:
   build:
     name: Build
@@ -17,31 +18,36 @@ jobs:
 
       - uses: docker/setup-buildx-action@v2
 
-      # TODO build and run unit tests
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-#      - name: Build images
-#        timeout-minutes: 10
-#        run: docker compose build
+      - name: Build and publish images
+        timeout-minutes: 15
+        run: |
+          cd backend
+          make docker_build_but_files
+          make docker_push_but_files
 
-#      - name: Run containers
-#        timeout-minutes: 5
-#        run: |
-#          docker compose up -d
-#          ./scripts/wait-script.sh
-#        env:
-#          WAIT_PORTS: 8080,8070,8060,8050
+          cd ../frontend
+          docker build -t kurushpondoxocrow/qrook_frontend:3.0 .
+          docker push kurushpondoxocrow/qrook_frontend:3.0
 
-#      - name: GitHub auto grader mark
-#        uses: Romanow/google-sheet-autograder-marker@v1.0
-#        with:
-#          google_token: ${{secrets.GOOGLE_API_KEY}}
-#          sheet_id: ""
-#          homework_number: 1
-#          user_column: 'D'
-#          column_offset: 'F'
-#          mark: "'+"
+      - name: Deploy
+        run: |
+          cd k8s
+          kubectl config set-cluster rsoi --server="$KUBER_HOST" --insecure-skip-tls-verify=true
+          kubectl config set-credentials cloud_okteto_com-user --token="$KUBER_TOKEN"
+          kubectl config set-context default --cluster=rsoi --user=cloud_okteto_com-user --namespace="kurush7"
+          kubectl config use-context default
 
-#      - name: Stop containers
-#        if: always()
-#        continue-on-error: true
-#        run: docker compose down -v
+          kubectl get pods
+          cd k8s
+          helm delete services && helm install services ./services-chart
+
+          sleep 20
+          kubectl apply -f api-ingress.yaml
+          kubectl apply -f auth-ingress.yaml
+          kubectl apply -f frontend-ingress.yaml
